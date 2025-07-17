@@ -29,50 +29,125 @@ class _EditProductScreenState extends State<EditProductScreen> {
     final provider = Provider.of<ProductProvider>(context, listen: false);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Product')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(children: [
-            TextFormField(
-              initialValue: name,
-              decoration: const InputDecoration(labelText: 'Product Name'),
-              validator: (val) => val == null || val.isEmpty ? 'Required' : null,
-              onSaved: (val) => name = val!,
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          'Edit Product',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.deepPurple,
+        elevation: 2,
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Card(
+            elevation: 8,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
-            TextFormField(
-              initialValue: price,
-              decoration: const InputDecoration(labelText: 'Price'),
-              keyboardType: TextInputType.number,
-              validator: (val) => val == null || double.tryParse(val) == null ? 'Enter valid price' : null,
-              onSaved: (val) => price = val!,
+            margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Edit Product',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepPurple,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    TextFormField(
+                      initialValue: name,
+                      decoration: const InputDecoration(
+                        labelText: 'Product Name',
+                        prefixIcon: Icon(Icons.shopping_bag),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator:
+                          (val) =>
+                              val == null || val.isEmpty ? 'Required' : null,
+                      onSaved: (val) => name = val!,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      initialValue: price,
+                      decoration: const InputDecoration(
+                        labelText: 'Price',
+                        prefixIcon: Icon(Icons.attach_money),
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator:
+                          (val) =>
+                              val == null || double.tryParse(val) == null
+                                  ? 'Enter valid price'
+                                  : null,
+                      onSaved: (val) => price = val!,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      initialValue: stock,
+                      decoration: const InputDecoration(
+                        labelText: 'Stock',
+                        prefixIcon: Icon(Icons.inventory),
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator:
+                          (val) =>
+                              val == null || int.tryParse(val) == null
+                                  ? 'Enter valid stock'
+                                  : null,
+                      onSaved: (val) => stock = val!,
+                    ),
+                    const SizedBox(height: 28),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.save, color: Colors.white),
+                        label: const Text(
+                          'Save Changes',
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurple,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          textStyle: const TextStyle(fontSize: 18),
+                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            final updated = Product(
+                              id: widget.product.id,
+                              name: name,
+                              price: double.parse(price),
+                              stock: int.parse(stock),
+                            );
+                            await provider.updateProduct(updated.id, updated);
+                            Navigator.pop(context);
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            TextFormField(
-              initialValue: stock,
-              decoration: const InputDecoration(labelText: 'Stock'),
-              keyboardType: TextInputType.number,
-              validator: (val) => val == null || int.tryParse(val) == null ? 'Enter valid stock' : null,
-              onSaved: (val) => stock = val!,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              child: const Text('Save Changes'),
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  final updated = Product(
-                    id: widget.product.id,
-                    name: name,
-                    price: double.parse(price),
-                    stock: int.parse(stock),
-                  );
-                  await provider.updateProduct(updated.id, updated);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-          ]),
+          ),
         ),
       ),
     );

@@ -3,11 +3,9 @@ import 'package:http/http.dart' as http;
 import '../models/product_model.dart';
 
 class ApiService {
-  
-  // static const baseUrl = 'http://10.0.2.2:5000/products'; 
+  // static const baseUrl = 'http://10.0.2.2:5000/products';
 
-  static const baseUrl = 'http://10.228.197.17:5000/products';
-
+  static const baseUrl = 'http://192.168.100.18:5000/products';
 
   static Future<List<Product>> fetchProducts() async {
     final res = await http.get(Uri.parse(baseUrl));

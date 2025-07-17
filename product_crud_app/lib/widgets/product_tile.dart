@@ -17,7 +17,10 @@ class ProductTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text(product.name),
+        title: Text(
+          product.name,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         subtitle: Text('Price: \$${product.price} | Stock: ${product.stock}'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,

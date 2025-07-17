@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Product CRUD App',
       theme: ThemeData(primarySwatch: Colors.teal),
-      home: const HomeScreen(),
+      home: const ProductListScreen(),
     );
   }
 }
